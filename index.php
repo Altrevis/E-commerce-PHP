@@ -21,7 +21,7 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="articles">
             <?php foreach ($articles as $article): ?>
                 <div class="article">
-                    <img src="<?= htmlspecialchars($article['Image-Link']); ?>" alt="<?= htmlspecialchars($article['Nom']); ?>">
+                    <img src="<?= htmlspecialchars($article['ImageLink']); ?>" alt="<?= htmlspecialchars($article['Nom']); ?>">
                     <h2><a href="product.php?id=<?= $article['ID']; ?>&slug=<?= $article['Slug']; ?>">
                         <?= htmlspecialchars($article['Nom']); ?>
                     </a></h2>

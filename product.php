@@ -29,7 +29,7 @@ if (!$article) {
 <body>
     <div class="container">
         <h1><?= htmlspecialchars($article['Nom']); ?></h1>
-        <img src="<?= htmlspecialchars($article['Image-Link']); ?>" alt="<?= htmlspecialchars($article['Nom']); ?>">
+        <img src="<?= htmlspecialchars($article['ImageLink']); ?>" alt="<?= htmlspecialchars($article['Nom']); ?>">
         <p><?= nl2br(htmlspecialchars($article['Description'])); ?></p>
         <p><strong>Publié le:</strong> <?= $article['DatePublication']; ?></p>
         
