@@ -1,7 +1,7 @@
 <?php
 $host = '10.37.4.104';
 $db = 'ecommerce';
-$user = 'root';
+$user = 'ynov_user';
 $pass = 'ynov2024';
 $charset = 'utf8mb4';
 
