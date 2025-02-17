@@ -62,8 +62,9 @@ foreach ($cartArticles as $article) {
                 <?php endforeach; ?>
             </ul>
             <p><strong>Total:</strong> <?= number_format($totalPanier, 2) ?> €</p>
-            <form action="order.php" method="POST">
-                <button type="submit" <?= ($solde >= $totalPanier) ? '' : 'disabled'; ?>>Passer commande</button>
+            <form action="addCart.php" method="POST">
+                <input type="hidden" name="article_id" value="<?= $article['ID']; ?>">
+                <button type="submit">Ajouter au panier</button>
             </form>
         <?php endif; ?>
         <a href="index.php">Retour à l'accueil</a>
