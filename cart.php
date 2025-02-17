@@ -14,7 +14,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 $solde = $user['Solde'] ?? 0;
 
 $stmt = $pdo->prepare("
-    SELECT CART.ArticleID, ARTICLE.Nom, ARTICLE.Image-Link, CART.Quantity, COMMANDES.TotalAmount
+    SELECT CART.ArticleID, ARTICLE.Nom, ARTICLE.ImageLink, CART.Quantity, COMMANDES.TotalAmount
     FROM CART
     JOIN ARTICLE ON CART.ArticleID = ARTICLE.ID
     WHERE CART.UserID = :userID
@@ -46,12 +46,12 @@ foreach ($cartArticles as $article) {
             <ul>
                 <?php foreach ($cartArticles as $article): ?>
                     <li>
-                        <img src="<?= htmlspecialchars($article['Image_Link']); ?>" alt="<?= htmlspecialchars($article['Nom']); ?>">
+                        <img src="<?= htmlspecialchars($article['ImageLink']); ?>" alt="<?= htmlspecialchars($article['Nom']); ?>">
                         <h2><?= htmlspecialchars($article['Nom']); ?></h2>
                         <p>Prix: <?= number_format($article['TotalAmount'], 2) ?> €</p>
                         <p>Quantité: 
                             <button class="decrease" data-id="<?= $article['ArticleID']; ?>">-</button>
-                            <span id="qty-<?= $article['ArticleID']; ?>"><?= $article['Quantite']; ?></span>
+                            <span id="qty-<?= $article['ArticleID']; ?>"><?= $article['Quantity']; ?></span>
                             <button class="increase" data-id="<?= $article['ArticleID']; ?>">+</button>
                         </p>
                         <form action="removeCart.php" method="POST">
