@@ -3,11 +3,11 @@ session_start();
 require 'database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'];
+    $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM USER WHERE Username = :email");
-    $stmt->execute(['email' => $email]);
+    $stmt = $pdo->prepare("SELECT * FROM USER WHERE Username = :username");
+    $stmt->execute(['username' => $username]);
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['Password'])) {
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: index.html');
         exit;
     } else {
-        echo "<p style='color:red;'>Email ou mot de passe incorrect.</p>";
+        echo "<p style='color:red;'>username ou mot de passe incorrect.</p>";
     }
 }
 ?>
