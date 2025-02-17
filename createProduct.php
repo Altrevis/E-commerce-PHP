@@ -8,17 +8,19 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nom = $_POST['nom'];
-    $slug = $_POST['slug'];
-    $description = $_POST['description'];
-    $image = $_POST['image'];
-    $quantity = $_POST['quantity'];
+    $nom = htmlspecialchars($_POST['nom']);
+    $slug = htmlspecialchars($_POST['slug']);
+    $description = htmlspecialchars($_POST['description']);
+    $image = htmlspecialchars($_POST['image']);
+    $quantity = (int)$_POST['quantity'];
     $datePublication = date('Y-m-d H:i:s');
     $dateModification = date('Y-m-d H:i:s');
     
-    $pdo->beginTransaction();
     try {
-        $stmt = $pdo->prepare("INSERT INTO ARTICLE (Nom, Slug, Description, DatePublication, DateModification, Image-Link) VALUES (:nom, :slug, :description, :datePublication, :dateModification, :image)");
+        $pdo->beginTransaction();
+        
+        $stmt = $pdo->prepare("INSERT INTO ARTICLE (Nom, Slug, Description, DatePublication, DateModification, ImageLink) 
+                               VALUES (:nom, :slug, :description, :datePublication, :dateModification, :image)");
         $stmt->execute([
             'nom' => $nom,
             'slug' => $slug,
@@ -37,11 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
         
         $pdo->commit();
+        
         header('Location: index.html');
         exit;
+        
     } catch (PDOException $e) {
         $pdo->rollBack();
-        echo "<p style='color:red;'>Erreur lors de la création de l'article.</p>";
+        echo "<p style='color:red;'>Erreur lors de la création de l'article : " . $e->getMessage() . "</p>";
     }
 }
 ?>
