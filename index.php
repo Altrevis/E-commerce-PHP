@@ -1,5 +1,5 @@
 <?php
-require 'config/database.php';
+require 'database.php';
 
 $stmt = $pdo->prepare("SELECT * FROM ARTICLE");
 $stmt->execute();
@@ -15,13 +15,13 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="navbar">
+    <!--<div class="navbar">
         <div class="container">
             <h2>Bienvenue</h2>
             <a href="login.html">Déconnexion</a>
             <a href="createProduct.html" class="btn">Créer un article</a>
         </div>
-    </div>
+    </div>-->
     
     <div class="container">
         <h2>Articles Disponibles</h2>

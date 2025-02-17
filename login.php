@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['ID'];
         $_SESSION['username'] = $user['Username'];
         $_SESSION['role'] = $user['Role'];
-        header('Location: index.php');
+        header('Location: index.html');
         exit;
     } else {
         echo "<p style='color:red;'>username ou mot de passe incorrect.</p>";
