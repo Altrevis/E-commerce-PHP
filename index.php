@@ -1,34 +1,40 @@
 <?php
-require 'database.php';
+require 'config/database.php';
 
-$query = "SELECT * FROM ARTICLE ORDER BY DatePublication DESC";
-$stmt = $pdo->query($query);
+$stmt = $pdo->prepare("SELECT * FROM ARTICLE");
+$stmt->execute();
 $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil - Articles</title>
+    <title>Accueil - Mon site</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="navbar">
+        <div class="container">
+            <h2>Bienvenue</h2>
+            <a href="login.html">Déconnexion</a>
+            <a href="createProduct.html" class="btn">Créer un article</a>
+        </div>
+    </div>
+    
     <div class="container">
-        <h1>Liste des Articles</h1>
+        <h2>Articles Disponibles</h2>
+        
         <div class="articles">
-            <?php if ($articles): ?>
-                <?php foreach ($articles as $article): ?>
-                    <div class="article">
-                        <h2><?php echo htmlspecialchars($article['Nom']); ?></h2>
-                        <p><strong>Description:</strong> <?php echo htmlspecialchars($article['Description']); ?></p>
-                        <p><strong>Date de publication:</strong> <?php echo $article['DatePublication']; ?></p>
-                        <img src="<?php echo htmlspecialchars($article['ImageLink']); ?>" alt="<?php echo htmlspecialchars($article['Nom']); ?>" width="200">
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Aucun article trouvé.</p>
-            <?php endif; ?>
+            <?php foreach ($articles as $article): ?>
+                <div class="article">
+                    <img src="<?= htmlspecialchars($article['Image-Link']); ?>" alt="<?= htmlspecialchars($article['Nom']); ?>">
+                    <h2><?= htmlspecialchars($article['Nom']); ?></h2>
+                    <p><?= htmlspecialchars($article['Description']); ?></p>
+                    <p><strong>Publié le:</strong> <?= $article['DatePublication']; ?></p>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </body>
