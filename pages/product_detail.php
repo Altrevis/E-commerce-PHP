@@ -17,7 +17,7 @@ if (!$article) {
 <p><?= htmlspecialchars($article['description']) ?></p>
 <img src="<?= htmlspecialchars($article['image_url']) ?>" alt="<?= htmlspecialchars($article['name']) ?>" width="200">
 
-<form method="POST" action="/pages/cart.php">
+<form method="POST" action="./cart.php">
     <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
     <input type="number" name="quantity" value="1" min="1">
     <button type="submit">Add to Cart</button>

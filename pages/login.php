@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user'] = $user;
-        header('Location: /php_exam');
+        header('Location: ./index.php');
         exit;
     } else {
         echo "Invalid username or password.";

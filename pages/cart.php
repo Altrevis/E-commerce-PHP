@@ -4,7 +4,7 @@ require_once '../includes/db.php';
 require_once '../includes/header.php';
 
 if (!isset($_SESSION['user'])) {
-    header('Location: /pages/login.php');
+    header('Location: ./login.php');
     exit;
 }
 
@@ -24,14 +24,14 @@ $cart_items = $stmt->fetchAll();
             <li>
                 <img src="<?= htmlspecialchars($item['image_url']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" width="50">
                 <?= htmlspecialchars($item['name']) ?> - Quantity: <?= $item['quantity'] ?>
-                <form method="POST" action="/pages/cart_validate.php">
+                <form method="POST" action="./cart_validate.php">
                     <input type="hidden" name="cart_id" value="<?= $item['id'] ?>">
                     <button type="submit">Remove</button>
                 </form>
             </li>
         <?php endforeach; ?>
     </ul>
-    <a href="/pages/cart_validate.php">Proceed to Checkout</a>
+    <a href="./cart_validate.php">Proceed to Checkout</a>
 <?php endif; ?>
 
 <?php require_once '../includes/footer.php'; ?>

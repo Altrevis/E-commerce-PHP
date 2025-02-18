@@ -1,25 +1,16 @@
 <?php
 session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-session_start();
 require_once '../includes/db.php';
 require_once '../includes/header.php';
-
-// Vérification si l'utilisateur est connecté
 if (!isset($_SESSION['user'])) {
-    header('Location: /php_exam/pages/login.php');
+    header('Location: ./login.php');
     exit;
 }
 
-$article_id = $_GET['id'] ?? null; // Vérification de l'ID de l'article
-if (!$article_id) {
-    die("Article ID is required.");
-}
-
+$article_id = $_GET['id'];
 $user_id = $_SESSION['user']['id'];
 
-// Vérification que l'article existe
+// Check if the user owns the article or is an admin
 $stmt = $pdo->prepare("SELECT * FROM articles WHERE id = ?");
 $stmt->execute([$article_id]);
 $article = $stmt->fetch();
@@ -36,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare("UPDATE articles SET name = ?, description = ?, image_url = ? WHERE id = ?");
     $stmt->execute([$name, $description, $image_url, $article_id]);
 
-    header('Location: /php_exam/index.php'); // Redirection vers la page principale après modification
+    header('Location: ./index.php');
     exit;
 }
 ?>

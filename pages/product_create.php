@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$article_id, $quantity]);
 
         echo "Product created successfully!";
-        header('Location: /php_exam');
+        header('Location: ./index.php');
         exit;
     } catch (PDOException $e) {
         echo "Database error: " . $e->getMessage();
