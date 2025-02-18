@@ -1,35 +1,30 @@
 <?php
-require 'database.php';
+session_start();
+require_once 'includes/db.php';
+require_once 'includes/header.php';
 
-$stmt = $pdo->prepare("SELECT * FROM ARTICLE");
-$stmt->execute();
-$articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Fetch all articles from the database, sorted by publication date (newest first)
+$stmt = $pdo->query("SELECT * FROM articles ORDER BY published_at DESC");
+$articles = $stmt->fetchAll();
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil - Mon site</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>    
-    <div class="container">
-        <h2>Articles Disponibles</h2>
-        
-        <div class="articles">
-            <?php foreach ($articles as $article): ?>
-                <div class="article">
-                    <img src="<?= htmlspecialchars($article['ImageLink']); ?>" alt="<?= htmlspecialchars($article['Nom']); ?>">
-                    <h2><a href="product.php?id=<?= $article['ID']; ?>&slug=<?= $article['Slug']; ?>">
-                        <?= htmlspecialchars($article['Nom']); ?>
-                    </a></h2>
-                    <p><?= htmlspecialchars($article['Description']); ?></p>
-                    <p><strong>Publié le:</strong> <?= $article['DatePublication']; ?></p>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</body>
-</html>
+<h1>Product List</h1>
+
+<?php if (empty($articles)): ?>
+    <p>No products available.</p>
+<?php else: ?>
+    <ul class="product-list">
+        <?php foreach ($articles as $article): ?>
+            <li class="product-item">
+                <a href="/pages/product_detail.php?id=<?= htmlspecialchars($article['id']) ?>">
+                    <img src="<?= htmlspecialchars($article['image_url']) ?>" alt="<?= htmlspecialchars($article['name']) ?>" width="150">
+                    <h2><?= htmlspecialchars($article['name']) ?></h2>
+                    <p><?= htmlspecialchars($article['description']) ?></p>
+                    <small>Published on: <?= htmlspecialchars($article['published_at']) ?></small>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
+<?php require_once 'includes/footer.php'; ?>
