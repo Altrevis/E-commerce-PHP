@@ -17,11 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($cartItem) {
         $stmt = $pdo->prepare("UPDATE CART SET Quantity = Quantity + 1 WHERE UserID = :user_id AND ArticleID = :article_id");
-        $stmt->execute(['user_id' => $user_id, 'article_id' => $article_id]);
     } else {
         $stmt = $pdo->prepare("INSERT INTO CART (UserID, ArticleID, Quantity) VALUES (:user_id, :article_id, 1)");
-        $stmt->execute(['user_id' => $user_id, 'article_id' => $article_id]);
     }
+
+    $stmt->execute(['user_id' => $user_id, 'article_id' => $article_id]);
 
     header('Location: cart.php');
     exit;

@@ -3,17 +3,17 @@ require 'database.php';
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    die("Veuillez vous connecter.");
+    header('Location: login.html');
+    exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['article_id'])) {
-    $userID = $_SESSION['user_id'];
-    $articleID = (int) $_POST['article_id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $cart_id = (int) $_POST['cart_id'];
 
-    $stmt = $pdo->prepare("DELETE FROM CART WHERE UserID = :userID AND ArticleID = :articleID");
-    $stmt->execute(['userID' => $userID, 'articleID' => $articleID]);
+    $stmt = $pdo->prepare("DELETE FROM CART WHERE ID = :cart_id");
+    $stmt->execute(['cart_id' => $cart_id]);
 
-    header("Location: cart.php");
+    header('Location: cart.php');
     exit;
 }
 ?>

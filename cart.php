@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 $stmt = $pdo->prepare("
-    SELECT c.ID AS CartID, a.ID, a.Nom, a.ImageLink, a.TotalAmount, c.Quantity
+    SELECT c.ID AS CartID, a.ID, a.Nom, a.ImageLink, a.Prix, c.Quantity
     FROM CART c
     JOIN ARTICLE a ON c.ArticleID = a.ID
     WHERE c.UserID = :user_id
@@ -20,7 +20,7 @@ $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $total = 0;
 foreach ($cartItems as $item) {
-    $total += $item['TotalAmount'] * $item['Quantity'];
+    $total += $item['Prix'] * $item['Quantity'];
 }
 ?>
 
@@ -53,11 +53,11 @@ foreach ($cartItems as $item) {
                 <tbody>
                     <?php foreach ($cartItems as $item): ?>
                         <tr>
-                            <td><img src="<?= htmlspecialchars($item['ImageLink']) ?>" width="50"></td>
+                            <td><img src="<?= htmlspecialchars($item['Image-Link']) ?>" width="50"></td>
                             <td><?= htmlspecialchars($item['Nom']) ?></td>
-                            <td><?= number_format($item['TotalAmount'], 2) ?>€</td>
+                            <td><?= number_format($item['Prix'], 2) ?>€</td>
                             <td><?= $item['Quantity'] ?></td>
-                            <td><?= number_format($item['TotalAmount'] * $item['Quantity'], 2) ?>€</td>
+                            <td><?= number_format($item['Prix'] * $item['Quantity'], 2) ?>€</td>
                             <td>
                                 <form action="updateCart.php" method="POST" style="display:inline;">
                                     <input type="hidden" name="cart_id" value="<?= $item['CartID'] ?>">
