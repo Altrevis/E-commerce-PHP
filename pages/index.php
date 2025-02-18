@@ -6,7 +6,12 @@ require_once '../includes/header.php';
 // Fetch all articles
 $stmt = $pdo->query("SELECT * FROM articles ORDER BY published_at DESC");
 $articles = $stmt->fetchAll();
+$isAdmin = isset($_SESSION['admin_authenticated']) && $_SESSION['admin_authenticated'] === true;
 ?>
+
+<?php if ($isAdmin): ?>
+    <a href="/admin.php" class="admin-btn">Admin</a>
+<?php endif; ?>
 
 <h1>Product List</h1>
 

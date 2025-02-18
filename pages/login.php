@@ -3,7 +3,10 @@ session_start();
 require_once '../includes/db.php';
 require_once '../includes/header.php';
 
-$error = ""; // Variable pour stocker les erreurs
+define('ADMIN_USER', 'user'); // Identifiant admin
+define('ADMIN_PASS', 'password'); // Mot de passe admin
+
+$error = ""; // Stockage des erreurs
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
@@ -17,12 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user'] = [
                 "id" => $user["id"],
-                "username" => $user["username"],
-                "role" => $user["role"]
+                "username" => $user["username"]
             ];
 
-            if ($user["role"] === "admin") {
-                $_SESSION["admin_authenticated"] = true;
+            // Vérification si c'est l'admin
+            if ($username === ADMIN_USER && $password === ADMIN_PASS) {
+                $_SESSION['admin_authenticated'] = true;
             }
 
             header('Location: ./index.php');
