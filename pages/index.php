@@ -1,27 +1,14 @@
 <?php
 session_start();
-require_once '../includes/db.php';
-require_once '../includes/header.php';
+require_once 'includes/db.php';
+require_once 'includes/header.php';
 
-// Fetch all articles
+// Fetch all articles from the database, sorted by publication date (newest first)
 $stmt = $pdo->query("SELECT * FROM articles ORDER BY published_at DESC");
 $articles = $stmt->fetchAll();
-
-// Vérifie si l'utilisateur est l'admin
-define('ADMIN_USER', 'admin');  // Nom d'utilisateur de l'admin
-define('ADMIN_PASS', 'password'); // Mot de passe de l'admin (hashé en DB normalement)
-$isAdmin = !empty($_SESSION["user"]) && $_SESSION["user"]["username"] === ADMIN_USER;
 ?>
 
-<?php if ($isAdmin): ?>
-    <a href="/admin.php" class="admin-btn">Admin</a>
-<?php endif; ?>
-
 <h1>Product List</h1>
-
-<?php if (!empty($_SESSION["user"]) && $_SESSION["user"]["role"] === "admin"): ?>
-    <a href="/pages/admin.php" class="admin-btn">Admin</a>
-<?php endif; ?>
 
 <?php if (empty($articles)): ?>
     <p>No products available.</p>
@@ -29,7 +16,7 @@ $isAdmin = !empty($_SESSION["user"]) && $_SESSION["user"]["username"] === ADMIN_
     <ul class="product-list">
         <?php foreach ($articles as $article): ?>
             <li class="product-item">
-                <a href="/pages/product_detail.php?id=<?= htmlspecialchars($article['id']) ?>">
+                <a href="./product_detail.php?id=<?= htmlspecialchars($article['id']) ?>">
                     <img src="<?= htmlspecialchars($article['image_url']) ?>" alt="<?= htmlspecialchars($article['name']) ?>" width="150">
                     <h2><?= htmlspecialchars($article['name']) ?></h2>
                     <p><?= htmlspecialchars($article['description']) ?></p>
@@ -40,4 +27,4 @@ $isAdmin = !empty($_SESSION["user"]) && $_SESSION["user"]["username"] === ADMIN_
     </ul>
 <?php endif; ?>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once 'includes/footer.php'; ?>
