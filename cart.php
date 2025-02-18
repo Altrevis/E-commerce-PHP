@@ -16,7 +16,7 @@ $solde = $user['Solde'];
 
 $stmt = $pdo->prepare("
     SELECT CART.ID AS CartID, ARTICLE.ID AS ArticleID, ARTICLE.Nom, ARTICLE.ImageLink, 
-           ARTICLE.Description, COUNT(CART.ArticleID) AS Quantity, STOCK.Quantity AS StockQuantity
+           ARTICLE.Description, COUNT(CART.ArticleID) AS Quantity, STOCK.Quantity AS StockQuantity, ARTICLE.Prix
     FROM CART
     JOIN ARTICLE ON CART.ArticleID = ARTICLE.ID
     JOIN STOCK ON ARTICLE.ID = STOCK.ArticleID
@@ -28,7 +28,7 @@ $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $total_amount = 0;
 foreach ($cart_items as $item) {
-    $total_amount += $item['Quantity'];
+    $total_amount += $item['Prix'] * $item['Quantity'];
 }
 
 ?>
@@ -57,6 +57,7 @@ foreach ($cart_items as $item) {
                         <th>Description</th>
                         <th>Quantité</th>
                         <th>Stock</th>
+                        <th>Prix Unitaire</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -68,6 +69,7 @@ foreach ($cart_items as $item) {
                             <td><?= htmlspecialchars($item['Description']); ?></td>
                             <td><?= $item['Quantity']; ?></td>
                             <td><?= $item['StockQuantity']; ?></td>
+                            <td><?= number_format($item['Prix'], 2) ?> €</td>
                             <td>
                                 <form action="update_cart.php" method="POST">
                                     <input type="hidden" name="article_id" value="<?= $item['ArticleID']; ?>">
