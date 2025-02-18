@@ -6,7 +6,11 @@ require_once '../includes/header.php';
 // Fetch all articles
 $stmt = $pdo->query("SELECT * FROM articles ORDER BY published_at DESC");
 $articles = $stmt->fetchAll();
-$isAdmin = isset($_SESSION['admin_authenticated']) && $_SESSION['admin_authenticated'] === true;
+
+// Vérifie si l'utilisateur est l'admin
+define('ADMIN_USER', 'admin');  // Nom d'utilisateur de l'admin
+define('ADMIN_PASS', 'password'); // Mot de passe de l'admin (hashé en DB normalement)
+$isAdmin = !empty($_SESSION["user"]) && $_SESSION["user"]["username"] === ADMIN_USER;
 ?>
 
 <?php if ($isAdmin): ?>
