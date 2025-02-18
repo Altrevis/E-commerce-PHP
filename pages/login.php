@@ -2,27 +2,48 @@
 session_start();
 require_once '../includes/db.php';
 require_once '../includes/header.php';
+
+$error = ""; // Variable pour stocker les erreurs
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
+    $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch();
+    if (!empty($username) && !empty($password)) {
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->execute([$username]);
+        $user = $stmt->fetch();
 
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user'] = $user;
-        header('Location: ./index.php');
-        exit;
+        if ($user && password_verify($password, $user['password'])) {
+            $_SESSION['user'] = [
+                "id" => $user["id"],
+                "username" => $user["username"],
+                "role" => $user["role"]
+            ];
+
+            if ($user["role"] === "admin") {
+                $_SESSION["admin_authenticated"] = true;
+            }
+
+            header('Location: ./index.php');
+            exit;
+        } else {
+            $error = "Identifiant ou mot de passe incorrect.";
+        }
     } else {
-        echo "Invalid username or password.";
+        $error = "Veuillez remplir tous les champs.";
     }
 }
 ?>
 
 <form method="POST">
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button type="submit">Login</button>
+    <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+    <input type="password" name="password" placeholder="Mot de passe" required>
+    <button type="submit">Connexion</button>
 </form>
-<?php require_once '../includes/footer.php';
+
+<?php if (!empty($error)): ?>
+    <p style="color:red;"><?= htmlspecialchars($error) ?></p>
+<?php endif; ?>
+
+<?php require_once '../includes/footer.php'; ?>

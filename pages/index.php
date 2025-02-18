@@ -3,12 +3,16 @@ session_start();
 require_once '../includes/db.php';
 require_once '../includes/header.php';
 
-// Fetch all articles from the database, sorted by publication date (newest first)
+// Fetch all articles
 $stmt = $pdo->query("SELECT * FROM articles ORDER BY published_at DESC");
 $articles = $stmt->fetchAll();
 ?>
 
 <h1>Product List</h1>
+
+<?php if (!empty($_SESSION["user"]) && $_SESSION["user"]["role"] === "admin"): ?>
+    <a href="/pages/admin.php" class="admin-btn">Admin</a>
+<?php endif; ?>
 
 <?php if (empty($articles)): ?>
     <p>No products available.</p>
