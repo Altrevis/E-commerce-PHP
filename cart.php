@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 $stmt = $pdo->prepare("
-    SELECT CART.ID AS CartID, ARTICLE.ID, ARTICLE.Nom, ARTICLE.ImageLink, ARTICLE.TotalAmount, CART.Quantity
+    SELECT c.ID AS CartID, a.ID, a.Nom, a.ImageLink, a.TotalAmount, c.Quantity
     FROM CART c
     JOIN ARTICLE a ON c.ArticleID = a.ID
     WHERE c.UserID = :user_id
