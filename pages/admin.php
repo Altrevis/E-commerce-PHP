@@ -19,9 +19,8 @@ $articles = $pdo->query("SELECT * FROM articles")->fetchAll();
     <?php foreach ($users as $user): ?>
         <li>
             <?= htmlspecialchars($user['username']) ?> - <?= htmlspecialchars($user['email']) ?>
-            <form method="POST" action="/admin_delete.php">
+            <form method="POST" action="/admin.php">
                 <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <button type="submit">Delete</button>
             </form>
         </li>
@@ -33,9 +32,8 @@ $articles = $pdo->query("SELECT * FROM articles")->fetchAll();
     <?php foreach ($articles as $article): ?>
         <li>
             <?= htmlspecialchars($article['name']) ?>
-            <form method="POST" action="/admin_delete.php">
-                <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+            <form method="POST" action="/admin.php">
+                <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
                 <button type="submit">Delete</button>
             </form>
         </li>
