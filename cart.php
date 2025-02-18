@@ -3,25 +3,34 @@ require 'database.php';
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.html');
-    exit;
+    header("Location: login.php");
+    exit();
 }
 
 $user_id = $_SESSION['user_id'];
 
+$stmt = $pdo->prepare("SELECT Solde FROM USER WHERE ID = :user_id");
+$stmt->execute(['user_id' => $user_id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+$solde = $user['Solde'];
+
 $stmt = $pdo->prepare("
-    SELECT c.ID AS CartID, a.ID, a.Nom, a.ImageLink, a.Prix, c.Quantity
-    FROM CART c
-    JOIN ARTICLE a ON c.ArticleID = a.ID
-    WHERE c.UserID = :user_id
+    SELECT CART.ID AS CartID, ARTICLE.ID AS ArticleID, ARTICLE.Nom, ARTICLE.ImageLink, 
+           ARTICLE.Description, COUNT(CART.ArticleID) AS Quantity, STOCK.Quantity AS StockQuantity
+    FROM CART
+    JOIN ARTICLE ON CART.ArticleID = ARTICLE.ID
+    JOIN STOCK ON ARTICLE.ID = STOCK.ArticleID
+    WHERE CART.UserID = :user_id
+    GROUP BY ARTICLE.ID
 ");
 $stmt->execute(['user_id' => $user_id]);
-$cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$total = 0;
-foreach ($cartItems as $item) {
-    $total += $item['Prix'] * $item['Quantity'];
+$total_amount = 0;
+foreach ($cart_items as $item) {
+    $total_amount += $item['Quantity'];
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -29,14 +38,15 @@ foreach ($cartItems as $item) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Votre Panier</title>
+    <title>Panier</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Votre Panier</h1>
-        
-        <?php if (empty($cartItems)): ?>
+        <p>Solde actuel : <?= number_format($solde, 2) ?> €</p>
+
+        <?php if (empty($cart_items)): ?>
             <p>Votre panier est vide.</p>
         <?php else: ?>
             <table>
@@ -44,34 +54,29 @@ foreach ($cartItems as $item) {
                     <tr>
                         <th>Image</th>
                         <th>Nom</th>
-                        <th>Prix</th>
+                        <th>Description</th>
                         <th>Quantité</th>
-                        <th>Total</th>
+                        <th>Stock</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($cartItems as $item): ?>
+                    <?php foreach ($cart_items as $item): ?>
                         <tr>
-                            <td><img src="<?= htmlspecialchars($item['Image-Link']) ?>" width="50"></td>
-                            <td><?= htmlspecialchars($item['Nom']) ?></td>
-                            <td><?= number_format($item['Prix'], 2) ?>€</td>
-                            <td><?= $item['Quantity'] ?></td>
-                            <td><?= number_format($item['Prix'] * $item['Quantity'], 2) ?>€</td>
+                            <td><img src="<?= htmlspecialchars($item['ImageLink']); ?>" width="50"></td>
+                            <td><?= htmlspecialchars($item['Nom']); ?></td>
+                            <td><?= htmlspecialchars($item['Description']); ?></td>
+                            <td><?= $item['Quantity']; ?></td>
+                            <td><?= $item['StockQuantity']; ?></td>
                             <td>
-                                <form action="updateCart.php" method="POST" style="display:inline;">
-                                    <input type="hidden" name="cart_id" value="<?= $item['CartID'] ?>">
-                                    <input type="hidden" name="action" value="increase">
-                                    <button type="submit">+</button>
+                                <form action="update_cart.php" method="POST">
+                                    <input type="hidden" name="article_id" value="<?= $item['ArticleID']; ?>">
+                                    <button type="submit" name="increase">+</button>
+                                    <button type="submit" name="decrease">-</button>
                                 </form>
-                                <form action="updateCart.php" method="POST" style="display:inline;">
-                                    <input type="hidden" name="cart_id" value="<?= $item['CartID'] ?>">
-                                    <input type="hidden" name="action" value="decrease">
-                                    <button type="submit">-</button>
-                                </form>
-                                <form action="removeCart.php" method="POST" style="display:inline;">
-                                    <input type="hidden" name="cart_id" value="<?= $item['CartID'] ?>">
-                                    <button type="submit">❌</button>
+                                <form action="remove_from_cart.php" method="POST">
+                                    <input type="hidden" name="cart_id" value="<?= $item['CartID']; ?>">
+                                    <button type="submit">Supprimer</button>
                                 </form>
                             </td>
                         </tr>
@@ -79,14 +84,19 @@ foreach ($cartItems as $item) {
                 </tbody>
             </table>
 
-            <p><strong>Total:</strong> <?= number_format($total, 2) ?>€</p>
+            <p>Total à payer : <?= number_format($total_amount, 2) ?> €</p>
 
-            <form action="checkout.php" method="POST">
-                <button type="submit">Passer commande</button>
-            </form>
+            <?php if ($solde >= $total_amount): ?>
+                <form action="checkout.php" method="POST">
+                    <button type="submit">Passer la commande</button>
+                </form>
+            <?php else: ?>
+                <p style="color: red;">Solde insuffisant pour passer la commande.</p>
+            <?php endif; ?>
+
         <?php endif; ?>
 
-        <a href="index.php">Retour à la boutique</a>
+        <a href="index.php">Retour à l'accueil</a>
     </div>
 </body>
 </html>
