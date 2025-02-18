@@ -4,7 +4,7 @@ require_once '../includes/db.php';
 require_once '../includes/header.php';
 
 if (!isset($_SESSION['user'])) {
-    header('Location: ./login.php');
+    header('Location: /pages/login.php');
     exit;
 }
 

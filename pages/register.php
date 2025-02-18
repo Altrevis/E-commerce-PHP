@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$username, $email, $password]);
 
     $_SESSION['user'] = ['username' => $username];
-    header('Location: ./');
+    header('Location: ./index.php');
     exit;
 }
 ?>

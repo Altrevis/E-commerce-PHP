@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="../assets/style.css"> <!-- Ensure this path is correct -->
 </head>
 <body>
-<header>
+    <header>
         <nav>
-            <a href="../pages/index.php">Home</a>
+            <a href="../pages">Home</a>
             <?php if (isset($_SESSION['user'])): ?>
                 <div class="dropdown">
                     <a href="../pages/cart.php">Cart</a>
@@ -18,9 +18,16 @@
                         <a href="../pages/cart_validate.php">Checkout</a>
                     </div>
                 </div>
-                <a href="../pages/product_create.php">Create Product</a>
+                <div class="dropdown">
+                    <a href="#">Product</a>
+                    <div class="dropdown-content">
+                        <a href="../pages/product_create.php">Create Product</a>
+                        <a href="../pages/product_edit.php">Edit Product</a>
+                        <a href="../pages/product_detail.php?id=1">View Product Details</a> <!-- Example link -->
+                    </div>
+                </div>
                 <a href="../pages/account.php">Account</a>
-                <a href="../logout.php">Logout</a>
+                <a href="../pages/logout.php">Logout</a>
             <?php else: ?>
                 <a href="../pages/login.php">Login</a>
                 <a href="../pages/register.php">Register</a>
