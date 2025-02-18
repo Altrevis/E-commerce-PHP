@@ -33,7 +33,7 @@ if (!$article) {
         <p><?= nl2br(htmlspecialchars($article['Description'])); ?></p>
         <p><strong>Publié le:</strong> <?= $article['DatePublication']; ?></p>
         
-        <form action="().php" method="POST">
+        <form action="add_to_cart.php" method="POST">
             <input type="hidden" name="article_id" value="<?= $article['ID']; ?>">
             <button type="submit">Ajouter au panier</button>
         </form>
