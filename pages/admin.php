@@ -12,6 +12,7 @@ $users = $pdo->query("SELECT * FROM users")->fetchAll();
 $articles = $pdo->query("SELECT * FROM articles")->fetchAll();
 ?>
 
+
 <h1>Admin Panel</h1>
 
 <h2>Users</h2>
@@ -19,7 +20,8 @@ $articles = $pdo->query("SELECT * FROM articles")->fetchAll();
     <?php foreach ($users as $user): ?>
         <li>
             <?= htmlspecialchars($user['username']) ?> - <?= htmlspecialchars($user['email']) ?>
-            <form method="POST" action="/admin.php">
+            <form method="POST" action="/admin_delete.php" style="display:inline;">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
                 <button type="submit">Delete</button>
             </form>
@@ -32,12 +34,14 @@ $articles = $pdo->query("SELECT * FROM articles")->fetchAll();
     <?php foreach ($articles as $article): ?>
         <li>
             <?= htmlspecialchars($article['name']) ?>
-            <form method="POST" action="/admin.php">
+            <form method="POST" action="/admin_delete.php" style="display:inline;">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
                 <button type="submit">Delete</button>
             </form>
+            <a href="/admin_edit.php?article_id=<?= $article['id'] ?>">
+                <button>Edit</button>
+            </a>
         </li>
     <?php endforeach; ?>
 </ul>
-
-<?php require_once '../includes/footer.php'; ?>
