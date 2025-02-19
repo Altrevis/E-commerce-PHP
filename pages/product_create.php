@@ -8,12 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = $_POST['description'];
     $image_url = $_POST['image_url'];
     $quantity = $_POST['quantity'];
+    $price = $_POST['price']; // Récupérer le prix
 
     $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
 
     try {
-        $stmt = $pdo->prepare("INSERT INTO articles (name, slug, description, image_url, published_at) VALUES (?, ?, ?, ?, NOW())");
-        $stmt->execute([$name, $slug, $description, $image_url]);
+        // Insérer l'article avec le prix
+        $stmt = $pdo->prepare("INSERT INTO articles (name, slug, description, image_url, price, published_at) VALUES (?, ?, ?, ?, ?, NOW())");
+        $stmt->execute([$name, $slug, $description, $image_url, $price]);
 
         $article_id = $pdo->lastInsertId();
 
@@ -36,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <textarea name="description" placeholder="Description"></textarea>
     <input type="text" name="image_url" placeholder="Image URL">
     <input type="number" name="quantity" placeholder="Quantity" required>
+    <input type="number" name="price" placeholder="Price" step="0.01" required> <!-- Champ prix ajouté -->
     <button type="submit">Create</button>
 </form>
 <?php require_once '../includes/footer.php'; ?>

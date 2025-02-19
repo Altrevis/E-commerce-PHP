@@ -22,6 +22,9 @@ if (!$article) {
 <p><?= htmlspecialchars($article['description']) ?></p>
 <img src="<?= htmlspecialchars($article['image_url']) ?>" alt="<?= htmlspecialchars($article['name']) ?>" width="200">
 
+<!-- Affichage du prix -->
+<p><strong>Price: $<?= number_format($article['price'], 2) ?></strong></p>
+
 <form method="POST" action="../pages/cart.php">
     <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
     <input type="number" name="quantity" value="1" min="1">

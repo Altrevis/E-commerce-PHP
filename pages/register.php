@@ -8,8 +8,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-    $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-    $stmt->execute([$username, $email, $password]);
+    // Insérer l'utilisateur avec balance initiale à 0
+    $stmt = $pdo->prepare("INSERT INTO users (username, email, password, balance) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$username, $email, $password, 0]);
 
     // Récupérer l'ID de l'utilisateur inséré
     $user_id = $pdo->lastInsertId();
@@ -18,7 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['user'] = [
         'id' => $user_id,
         'username' => $username,
-        'email' => $email
+        'email' => $email,
+        'balance' => 0 // initialisation de la balance à 0
     ];
 
     header('Location: ./index.php');
