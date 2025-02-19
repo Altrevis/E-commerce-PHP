@@ -41,4 +41,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="number" name="price" placeholder="Price" step="0.01" required> <!-- Champ prix ajouté -->
     <button type="submit">Create</button>
 </form>
-<?php require_once '../includes/footer.php'; ?>

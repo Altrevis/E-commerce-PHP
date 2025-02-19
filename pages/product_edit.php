@@ -38,5 +38,3 @@ $articles = $stmt->fetchAll();
     <?php endforeach; ?>
 <?php endif; ?>
 
-<?php require_once '../includes/footer.php'; ?>
-

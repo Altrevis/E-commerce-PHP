@@ -63,5 +63,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="number" name="amount" placeholder="Amount to add" min="1" required>
     <button type="submit" name="add_money">Add Money</button>
 </form>
-
-<?php require_once '../includes/footer.php'; ?>

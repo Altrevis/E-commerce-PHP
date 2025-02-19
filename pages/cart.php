@@ -68,5 +68,3 @@ $cart_items = $stmt->fetchAll();
     </ul>
     <a href="../pages/cart_validate.php">Proceed to Checkout</a>
 <?php endif; ?>
-
-<?php require_once '../includes/footer.php'; ?>

@@ -42,5 +42,3 @@ if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin') {
     echo '<a href="/pages/admin.php"><button type="button">Go to Admin Panel</button></a>';
 }
 ?>
-
-<?php require_once '../includes/footer.php'; ?>

@@ -34,5 +34,3 @@ if (!$article) {
 <?php if (isset($_SESSION['user']) && ($article['user_id'] == $_SESSION['user']['id'] || $_SESSION['user']['role'] === 'admin')): ?>
     <a href="product_edit.php?id=<?= $article['id'] ?>" class="btn btn-primary">Edit Product</a>
 <?php endif; ?>
-
-<?php require_once '../includes/footer.php'; ?>

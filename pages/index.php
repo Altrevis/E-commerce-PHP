@@ -27,5 +27,3 @@ $articles = $stmt->fetchAll();
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
-
-<?php require_once '../includes/footer.php'; ?>
