@@ -83,9 +83,6 @@ $articles = $pdo->query("SELECT * FROM articles")->fetchAll();
                 <input type="hidden" name="delete_article" value="1">
                 <button type="submit">Delete</button>
             </form>
-            <a href="/admin_edit.php?article_id=<?= $article['id'] ?>">
-                <button>Edit</button>
-            </a>
         </li>
     <?php endforeach; ?>
 </ul>
