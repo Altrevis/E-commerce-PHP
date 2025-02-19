@@ -16,13 +16,14 @@ $articles = $stmt->fetchAll();
     <ul class="product-list">
         <?php foreach ($articles as $article): ?>
             <li class="product-item">
-                <a href="/pages/product_detail.php?id=<?= htmlspecialchars($article['id']) ?>">
+            <a href="product_detail.php?id=<?= htmlspecialchars($article['id']) ?>">
                     <img src="<?= htmlspecialchars($article['image_url']) ?>" alt="<?= htmlspecialchars($article['name']) ?>" width="150">
                     <h2><?= htmlspecialchars($article['name']) ?></h2>
                     <p><?= htmlspecialchars($article['description']) ?></p>
                     <small>Published on: <?= htmlspecialchars($article['published_at']) ?></small>
                 </a>
             </li>
+            <a href="/pages/product_detail.php?id=<?= htmlspecialchars($article['id']) ?>">
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>

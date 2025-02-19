@@ -1,8 +1,8 @@
 <?php
 // Database connection
-$host = 'localhost';
+$host = '10.34.4.104';
 $dbname = 'php_exam';
-$username = 'ynov_user';
+$username = 'ynov';
 $password = 'ynov2024';
 
 try {

@@ -8,6 +8,11 @@ $stmt = $pdo->prepare("SELECT * FROM articles WHERE id = ?");
 $stmt->execute([$id]);
 $article = $stmt->fetch();
 
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die("Invalid product ID.");
+}
+$id = (int) $_GET['id'];
+
 if (!$article) {
     die("Article not found.");
 }
@@ -22,5 +27,9 @@ if (!$article) {
     <input type="number" name="quantity" value="1" min="1">
     <button type="submit">Add to Cart</button>
 </form>
+
+<?php if (isset($_SESSION['user']) && ($article['user_id'] == $_SESSION['user']['id'] || $_SESSION['user']['role'] === 'admin')): ?>
+    <a href="product_edit.php?id=<?= $article['id'] ?>" class="btn btn-primary">Edit Product</a>
+<?php endif; ?>
 
 <?php require_once '../includes/footer.php'; ?>
