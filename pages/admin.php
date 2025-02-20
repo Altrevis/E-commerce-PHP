@@ -2,51 +2,54 @@
 session_start();
 require_once '../includes/db.php';
 require_once '../includes/header.php';
+
+// Vérification de l'authentification et des permissions
 if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
     header('Location: /pages/login.php');
     exit;
 }
 
-// Handle deletion of user
+// Suppression d'un utilisateur
 if (isset($_POST['delete_user']) && $_POST['delete_user'] === '1') {
     $user_id = $_POST['user_id'];
+
     try {
         $pdo->beginTransaction(); // Début de la transaction
 
-        // Supprimer les commandes liées à l'utilisateur
+        // Suppression des commandes de l'utilisateur
         $stmt = $pdo->prepare("DELETE FROM orders WHERE user_id = ?");
         $stmt->execute([$user_id]);
 
-        // Supprimer le panier de l'utilisateur (si applicable)
+        // Suppression du panier de l'utilisateur (si applicable)
         $stmt = $pdo->prepare("DELETE FROM cart WHERE user_id = ?");
         $stmt->execute([$user_id]);
 
-        // Supprimer l'utilisateur de la base de données
+        // Suppression de l'utilisateur
         $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
         $stmt->execute([$user_id]);
 
-        $pdo->commit(); // Valider la transaction
-
+        $pdo->commit(); // Validation de la transaction
         echo "User deleted successfully!";
     } catch (PDOException $e) {
-        $pdo->rollBack(); // Annuler la transaction en cas d'erreur
+        $pdo->rollBack(); // Annulation en cas d'erreur
         echo "Error deleting user: " . $e->getMessage();
     }
 }
 
-// Handle deletion of article
+// Suppression d'un article
 if (isset($_POST['delete_article']) && $_POST['delete_article'] === '1') {
     $article_id = $_POST['article_id'];
+
     try {
-        // Delete records from stock table
+        // Suppression des enregistrements associés dans la table stock
         $stmt = $pdo->prepare("DELETE FROM stock WHERE article_id = ?");
         $stmt->execute([$article_id]);
-        
-        // Delete the article from the database
+
+        // Suppression de l'article
         $stmt = $pdo->prepare("DELETE FROM articles WHERE id = ?");
         $stmt->execute([$article_id]);
-        
-        // Refresh the articles list
+
+        // Rafraîchissement de la liste des articles
         $articles = $pdo->query("SELECT * FROM articles")->fetchAll();
         echo "Article deleted successfully!";
     } catch (PDOException $e) {
@@ -54,20 +57,21 @@ if (isset($_POST['delete_article']) && $_POST['delete_article'] === '1') {
     }
 }
 
-// Fetch all users and articles
+// Récupération des utilisateurs et des articles
 $users = $pdo->query("SELECT * FROM users")->fetchAll();
 $articles = $pdo->query("SELECT * FROM articles")->fetchAll();
 ?>
 
-
 <div class="admin-panel">
     <h1>Admin Panel</h1>
+
     <h2>Users</h2>
     <div class="user-list">
         <?php foreach ($users as $user): ?>
             <?php if ($user['role'] !== 'admin'): ?>
                 <div class="user-item">
                     <h2><?= htmlspecialchars($user['username']) ?> - <?= htmlspecialchars($user['email']) ?></h2>
+
                     <div class="article-list">
                         <?php foreach ($articles as $article): ?>
                             <?php if ($article['user_id'] == $user['id']): ?>
@@ -83,6 +87,7 @@ $articles = $pdo->query("SELECT * FROM articles")->fetchAll();
                             <?php endif; ?>
                         <?php endforeach; ?>
                     </div>
+
                     <form method="POST" action="" style="display:inline;">
                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                         <input type="hidden" name="user_id" value="<?= $user['id'] ?>">

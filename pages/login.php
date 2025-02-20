@@ -4,32 +4,39 @@ require_once '../includes/db.php';
 require_once '../includes/header.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
+    // Récupération des identifiants fournis
+    $username = trim($_POST['username']);
     $password = $_POST['password'];
 
+    // Vérification si l'utilisateur existe
     $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->execute([$username]);
     $user = $stmt->fetch();
 
+    // Vérification du mot de passe
     if ($user && password_verify($password, $user['password'])) {
-        // Si la connexion est réussie, on stocke l'utilisateur dans la session
-        $_SESSION['user'] = $user;
-        $_SESSION['username'] = $user['username'];
+        // Stockage des informations utilisateur dans la session
+        $_SESSION['user'] = [
+            'id'       => $user['id'],
+            'username' => $user['username'],
+            'role'     => $user['role']
+        ];
 
-        // Si l'utilisateur est un admin, rediriger vers la page d'admin
-        if ($user['role'] === 'admin') {
-            header('Location: ./admin.php');
-            exit;
-        } else {
-            // Sinon, rediriger vers la page d'accueil
-            header('Location: ./index.php');
-            exit;
-        }
+        // Redirection en fonction du rôle
+        $redirect_url = ($user['role'] === 'admin') ? './admin.php' : './index.php';
+        header("Location: $redirect_url");
+        exit;
     } else {
-        echo "Invalid username or password.";
+        $error_message = "Invalid username or password.";
     }
 }
 ?>
+
+<h1>Login</h1>
+
+<?php if (!empty($error_message)): ?>
+    <p style="color: red;"><?= htmlspecialchars($error_message) ?></p>
+<?php endif; ?>
 
 <form method="POST">
     <input type="text" name="username" placeholder="Username" required>
@@ -38,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </form>
 
 <?php
-// Si l'utilisateur est déjà connecté et est un admin, afficher un bouton pour accéder à l'admin
-if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin') {
-    echo '<a href="/pages/admin.php"><button type="button">Go to Admin Panel</button></a>';
-}
+// Affichage du bouton d'accès au panel admin si l'utilisateur est connecté et admin
+if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin') :
 ?>
+    <a href="/pages/admin.php"><button type="button">Go to Admin Panel</button></a>
+<?php endif; ?>

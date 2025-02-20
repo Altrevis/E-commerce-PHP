@@ -267,8 +267,8 @@ a:hover {
 }
 .account-container {
     display: grid;
-
     gap: 50px;
+    margin-bottom: -20px;
 }
 
 .account-info {
@@ -278,4 +278,9 @@ a:hover {
 .edit-profile {
     grid-column: 2;
     margin-top: 0;
+}
+
+.add-money {
+    grid-column: 2;
+    margin-top: -10%;
 }
