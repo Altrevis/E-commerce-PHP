@@ -14,17 +14,26 @@ $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['email']) && isset($_POST['password'])) {
-        $email = $_POST['email'];
-        $password = $_POST['password'] ? password_hash($_POST['password'], PASSWORD_BCRYPT) : $user['password'];
+    if (isset($_POST['add_money'])) {
+        $amount = $_POST['amount'];
 
-        $stmt = $pdo->prepare("UPDATE users SET email = ?, password = ? WHERE id = ?");
-        $stmt->execute([$email, $password, $user_id]);
+        // Assurer que le montant est valide
+        if ($amount > 0) {
+            // Mise à jour de la balance
+            $stmt = $pdo->prepare("UPDATE users SET balance = balance + ? WHERE id = ?");
+            $stmt->execute([$amount, $user_id]);
 
-        $_SESSION['user']['email'] = $email;
-        echo "Profile updated successfully!";
+            // Mettre à jour la session pour refléter la nouvelle balance
+            $_SESSION['user']['balance'] += $amount;
+
+            // Rediriger pour éviter la soumission multiple et rafraîchir les données
+            header("Location: account.php");
+            exit;
+        } else {
+            echo "Invalid amount.";
+        }
     }
-
+    
     // Ajouter de l'argent
     if (isset($_POST['add_money'])) {
         $amount = $_POST['amount'];
