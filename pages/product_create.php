@@ -38,12 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<h1>Create Product</h1>
-<form method="POST">
-    <input type="text" name="name" placeholder="Name" required>
-    <textarea name="description" placeholder="Description"></textarea>
-    <input type="text" name="image_url" placeholder="Image URL">
-    <input type="number" name="quantity" placeholder="Quantity" required>
-    <input type="number" name="price" placeholder="Price" step="0.01" required> <!-- Champ prix ajouté -->
-    <button type="submit">Create</button>
-</form>
+<div class="narrow-block">
+    <h1>Create Product</h1>
+    <form method="POST">
+        <input type="text" name="name" placeholder="Name" required>
+        <textarea name="description" placeholder="Description"></textarea>
+        <input type="text" name="image_url" placeholder="Image URL">
+        <input type="number" name="quantity" placeholder="Quantity" required>
+        <input type="number" name="price" placeholder="Price" step="0.01" required>
+        <button type="submit">Create</button>
+    </form>
+</div>

@@ -279,3 +279,7 @@ a:hover {
     grid-column: 2;
     margin-top: 0;
 }
+.narrow-block {
+    max-width: 45%;
+    margin: 0 auto;
+}
