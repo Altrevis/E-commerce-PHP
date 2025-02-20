@@ -34,7 +34,7 @@ if (!$article) {
 
 <!-- Bouton Edit Product pour les admins -->
 <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
-    <a href="product_edit.php?id=<?= $article['id'] ?>" class="edit-button">Edit Product</a>
+<a href="product_edit.php?id=<?= $article['id'] ?>" class="edit-button">Edit Product</a>
 <?php endif; ?>
 
 

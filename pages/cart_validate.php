@@ -64,4 +64,3 @@ $total = $stmt->fetchColumn();
 <form method="POST">
     <button type="submit">Confirm and Pay</button>
 </form>
-

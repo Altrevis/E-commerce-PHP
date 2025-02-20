@@ -65,50 +65,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="edit-profile">
         <h2>Edit Profile</h2>
         <form method="POST">
-            <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($user['email']) ?>" required>
+            <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($user['email']) ?>"
+                required>
             <input type="password" name="password" placeholder="New Password">
             <button type="submit">Update</button>
         </form>
         <div class="add-money">
-        <h2>Add Money</h2>
-        <form method="POST">
-            <input type="number" name="amount" placeholder="Amount to add" min="1" required>
-            <button type="submit" name="add_money">Add Money</button>
-        </form>
-    </div>
-    <h2>My Products</h2>
+            <h2>Add Money</h2>
+            <form method="POST">
+                <input type="number" name="amount" placeholder="Amount to add" min="1" required>
+                <button type="submit" name="add_money">Add Money</button>
+            </form>
+        </div>
+        <h2>My Products</h2>
 
-<?php
+        <?php
 $stmt = $pdo->prepare("SELECT * FROM articles WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $articles = $stmt->fetchAll();
 ?>
 
-<?php if (empty($articles)): ?>
-    <p>No products available.</p>
-<?php else: ?>
-    <ul class="product-list">
-        <?php foreach ($articles as $article): ?>
+        <?php if (empty($articles)): ?>
+        <p>No products available.</p>
+        <?php else: ?>
+        <ul class="product-list">
+            <?php foreach ($articles as $article): ?>
             <li class="product-item">
                 <a href="product_detail.php?id=<?= htmlspecialchars($article['id']) ?>">
-                    <img src="<?= htmlspecialchars($article['image_url']) ?>" alt="<?= htmlspecialchars($article['name']) ?>" width="150">
+                    <img src="<?= htmlspecialchars($article['image_url']) ?>"
+                        alt="<?= htmlspecialchars($article['name']) ?>" width="150">
                     <h2><?= htmlspecialchars($article['name']) ?></h2>
                     <p><?= htmlspecialchars($article['description']) ?></p>
-                    <p><strong>Price: $<?= number_format($article['price'], 2) ?></strong></p> <!-- Affichage du prix -->
+                    <p><strong>Price: $<?= number_format($article['price'], 2) ?></strong></p>
+                    <!-- Affichage du prix -->
                     <p>Published on: <?= htmlspecialchars($article['published_at']) ?></p>
                     <!-- Bouton Edit Product pour les admins -->
                     <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'user'): ?>
-                        <a href="product_edit.php?id=<?= $article['id'] ?>" class="edit-button">Edit Product</a>
+                    <a href="product_edit.php?id=<?= $article['id'] ?>" class="edit-button">Edit Product</a>
                     <?php endif; ?>
                 </a>
             </li>
-        <?php endforeach; ?>
-        
-    </ul>
-<?php endif; ?>
+            <?php endforeach; ?>
+
+        </ul>
+        <?php endif; ?>
     </div>
 </div>
-
-
-
-

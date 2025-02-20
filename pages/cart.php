@@ -64,22 +64,23 @@ $cart_items = $stmt->fetchAll();
 <h1>Cart</h1>
 
 <?php if (empty($cart_items)): ?>
-    <p>Your cart is empty.</p>
+<p>Your cart is empty.</p>
 <?php else: ?>
-    <ul>
-        <?php foreach ($cart_items as $item): ?>
-            <li>
-                <img src="<?= htmlspecialchars($item['image_url']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" width="50">
-                <?= htmlspecialchars($item['name']) ?> - Quantity: <?= $item['quantity'] ?> - Price: $<?= number_format($item['price'], 2) ?>
-                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
-                    <input type="hidden" name="cart_id" value="<?= $item['id'] ?>">
-                    <button type="submit">Remove</button>                  
-                </form>
-                <?php if (!empty($error)): ?>
-                        <p style="color: red;"><?= htmlspecialchars($error) ?></p>
-                    <?php endif; ?>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-    <a href="../pages/cart_validate.php">Proceed to Checkout</a>
+<ul>
+    <?php foreach ($cart_items as $item): ?>
+    <li>
+        <img src="<?= htmlspecialchars($item['image_url']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" width="50">
+        <?= htmlspecialchars($item['name']) ?> - Quantity: <?= $item['quantity'] ?> - Price:
+        $<?= number_format($item['price'], 2) ?>
+        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+            <input type="hidden" name="cart_id" value="<?= $item['id'] ?>">
+            <button type="submit">Remove</button>
+        </form>
+        <?php if (!empty($error)): ?>
+        <p style="color: red;"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
+    </li>
+    <?php endforeach; ?>
+</ul>
+<a href="../pages/cart_validate.php">Proceed to Checkout</a>
 <?php endif; ?>

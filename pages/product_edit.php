@@ -64,15 +64,17 @@ if (isset($_POST['delete_article']) && $_POST['delete_article'] === '1') {
     <input type="text" name="name" value="<?= htmlspecialchars($article['name']) ?>" required>
     <textarea name="description"><?= htmlspecialchars($article['description']) ?></textarea>
     <input type="text" name="image_url" value="<?= htmlspecialchars($article['image_url']) ?>">
-    <input type="number" name="price" value="<?= htmlspecialchars($article['price']) ?>" step="0.01" required> <!-- Champ prix ajouté -->
+    <input type="number" name="price" value="<?= htmlspecialchars($article['price']) ?>" step="0.01" required>
+    <!-- Champ prix ajouté -->
 
     <button type="submit" name="update">Update</button>
 </form>
 
 <!-- Bouton Delete -->
-<form method="POST" action="" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this product?');">
-                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                                        <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
-                                        <input type="hidden" name="delete_article" value="1">
-                                        <button type="submit">Delete</button>
+<form method="POST" action="" style="display:inline;"
+    onsubmit="return confirm('Are you sure you want to delete this product?');">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+    <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
+    <input type="hidden" name="delete_article" value="1">
+    <button type="submit">Delete</button>
 </form>
