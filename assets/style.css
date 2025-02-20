@@ -276,7 +276,8 @@ a:hover {
 .account-container {
     display: grid;
     gap: 50px;
-    margin-bottom: -20px;
+    margin-bottom: 20px;
+    width: 45%;
 }
 
 .account-info {

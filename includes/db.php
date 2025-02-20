@@ -2,8 +2,8 @@
 // Database connection
 $host = 'localhost';
 $dbname = 'php_exam';
-$username = 'leo';
-$password = 'leo';
+$username = 'ynov_user';
+$password = 'ynov2025';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
