@@ -98,7 +98,7 @@ $articles = $stmt->fetchAll();
                     <p>Published on: <?= htmlspecialchars($article['published_at']) ?></p>
                     <!-- Bouton Edit Product pour les admins -->
                     <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'user'): ?>
-                        <button type="button" class="edit-button" onclick="location.href='product_edit.php?id=<?= $article['id'] ?>'">Edit Product</button>
+                        <a href="product_edit.php?id=<?= $article['id'] ?>" class="edit-button">Edit Product</a>
                     <?php endif; ?>
                 </a>
             </li>
