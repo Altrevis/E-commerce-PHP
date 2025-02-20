@@ -11,18 +11,25 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
 if (isset($_POST['delete_user']) && $_POST['delete_user'] === '1') {
     $user_id = $_POST['user_id'];
     try {
-        // Delete the cart record
+        $pdo->beginTransaction(); // Début de la transaction
+
+        // Supprimer les commandes liées à l'utilisateur
+        $stmt = $pdo->prepare("DELETE FROM orders WHERE user_id = ?");
+        $stmt->execute([$user_id]);
+
+        // Supprimer le panier de l'utilisateur (si applicable)
         $stmt = $pdo->prepare("DELETE FROM cart WHERE user_id = ?");
         $stmt->execute([$user_id]);
-        
-        // Delete the user from the database
+
+        // Supprimer l'utilisateur de la base de données
         $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
         $stmt->execute([$user_id]);
-        
-        // Refresh the users list
-        $users = $pdo->query("SELECT * FROM users")->fetchAll();
+
+        $pdo->commit(); // Valider la transaction
+
         echo "User deleted successfully!";
     } catch (PDOException $e) {
+        $pdo->rollBack(); // Annuler la transaction en cas d'erreur
         echo "Error deleting user: " . $e->getMessage();
     }
 }
