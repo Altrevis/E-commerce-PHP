@@ -47,14 +47,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <h1>Account</h1>
-<p>Username: <?= htmlspecialchars($user['username']) ?></p>
-<p>Email: <?= htmlspecialchars($user['email']) ?></p>
-<p>Balance: $<?= htmlspecialchars(number_format($user['balance'], 2)) ?></p> <!-- Affichage de la balance -->
+<h3>Username: <?= htmlspecialchars($user['username']) ?></h3>
+<h3>Email: <?= htmlspecialchars($user['email']) ?></h3>
+<h3>Balance: $<?= htmlspecialchars(number_format($user['balance'], 2)) ?></h3> <!-- Affichage de la balance -->
 
 <h2>Edit Profile</h2>
 <form method="POST">
     <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($user['email']) ?>" required>
-    <input type="password" name="password" placeholder="New Password (leave blank to keep current)">
+    <input type="password" name="password" placeholder="New Password">
     <button type="submit">Update</button>
 </form>
 
