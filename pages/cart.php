@@ -11,18 +11,30 @@ if (!isset($_SESSION['user'])) {
 if (isset($_POST['article_id']) && isset($_POST['quantity'])) {
     $article_id = (int) $_POST['article_id'];
     $quantity = (int) $_POST['quantity'];
-
     $user_id = $_SESSION['user']['id'];
-    $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = ? AND article_id = ?");
-    $stmt->execute([$user_id, $article_id]);
-    $cart_item = $stmt->fetch();
 
-    if ($cart_item) {
-        $stmt = $pdo->prepare("UPDATE cart SET quantity = quantity + ? WHERE id = ?");
-        $stmt->execute([$quantity, $cart_item['id']]);
+    // Vérifier le stock disponible
+    $stmt = $pdo->prepare("SELECT quantity FROM stock WHERE article_id = ?");
+    $stmt->execute([$article_id]);
+    $stock_available = $stmt->fetchColumn();
+
+    // Vérifier la quantité déjà présente dans le panier
+    $stmt = $pdo->prepare("SELECT quantity FROM cart WHERE user_id = ? AND article_id = ?");
+    $stmt->execute([$user_id, $article_id]);
+    $existing_quantity = $stmt->fetchColumn() ?: 0;
+
+    if ($stock_available === false) {
+        $error = "Article non trouvé.";
+    } elseif (($existing_quantity + $quantity) > $stock_available) {
+        $error = "Stock insuffisant. Il reste seulement $stock_available en stock.";
     } else {
-        $stmt = $pdo->prepare("INSERT INTO cart (user_id, article_id, quantity) VALUES (?, ?, ?)");
-        $stmt->execute([$user_id, $article_id, $quantity]);
+        if ($existing_quantity) {
+            $stmt = $pdo->prepare("UPDATE cart SET quantity = quantity + ? WHERE user_id = ? AND article_id = ?");
+            $stmt->execute([$quantity, $user_id, $article_id]);
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO cart (user_id, article_id, quantity) VALUES (?, ?, ?)");
+            $stmt->execute([$user_id, $article_id, $quantity]);
+        }
     }
 }
 
@@ -61,8 +73,11 @@ $cart_items = $stmt->fetchAll();
                 <?= htmlspecialchars($item['name']) ?> - Quantity: <?= $item['quantity'] ?> - Price: $<?= number_format($item['price'], 2) ?>
                 <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                     <input type="hidden" name="cart_id" value="<?= $item['id'] ?>">
-                    <button type="submit">Remove</button>
+                    <button type="submit">Remove</button>                  
                 </form>
+                <?php if (!empty($error)): ?>
+                        <p style="color: red;"><?= htmlspecialchars($error) ?></p>
+                    <?php endif; ?>
             </li>
         <?php endforeach; ?>
     </ul>
