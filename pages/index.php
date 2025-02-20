@@ -21,11 +21,17 @@ $articles = $stmt->fetchAll();
                     <h2><?= htmlspecialchars($article['name']) ?></h2>
                     <p><?= htmlspecialchars($article['description']) ?></p>
                     <p><strong>Price: $<?= number_format($article['price'], 2) ?></strong></p> <!-- Affichage du prix -->
-                    <small>Published on: <?= htmlspecialchars($article['published_at']) ?></small>
-                    <small>Created by: <a href="profile.php?id=<?= htmlspecialchars($article['user_id']) ?>"><?= htmlspecialchars($article['username']) ?></a></small>
+                    <p>Published on: <?= htmlspecialchars($article['published_at']) ?></p>
+                    <small>Created by:</small>
+                    <small>
+                        <button class="username-button">
+                            <a href="profile.php?id=<?= htmlspecialchars($article['user_id']) ?>">
+                                <?= htmlspecialchars($article['username']) ?>
+                            </a>
+                        </button>
+                    </small>
                 </a>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
-

@@ -46,25 +46,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<h1>Account</h1>
-<h3>Username: <?= htmlspecialchars($user['username']) ?></h3>
-<h3>Email: <?= htmlspecialchars($user['email']) ?></h3>
-<h3>Balance: $<?= htmlspecialchars(number_format($user['balance'], 2)) ?></h3> <!-- Affichage de la balance -->
-
-<h2>Edit Profile</h2>
-<form method="POST">
-    <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($user['email']) ?>" required>
-    <input type="password" name="password" placeholder="New Password">
-    <button type="submit">Update</button>
-</form>
-
-<h2>Add Money</h2>
-<form method="POST">
-    <input type="number" name="amount" placeholder="Amount to add" min="1" required>
-    <button type="submit" name="add_money">Add Money</button>
-</form>
-
-<h1>My Products</h1>
+<div class="account-container">
+    <div class="account-info">
+        <h1>Account</h1>
+        <h3>Username: <?= htmlspecialchars($user['username']) ?></h3>
+        <h3>Email: <?= htmlspecialchars($user['email']) ?></h3>
+        <h3>Balance: $<?= htmlspecialchars(number_format($user['balance'], 2)) ?></h3>
+    </div>
+    <div class="edit-profile">
+        <h2>Edit Profile</h2>
+        <form method="POST">
+            <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($user['email']) ?>" required>
+            <input type="password" name="password" placeholder="New Password">
+            <button type="submit">Update</button>
+        </form>
+        <div class="add-money">
+        <h2>Add Money</h2>
+        <form method="POST">
+            <input type="number" name="amount" placeholder="Amount to add" min="1" required>
+            <button type="submit" name="add_money">Add Money</button>
+        </form>
+    </div>
+    <h2>My Products</h2>
 
 <?php
 $stmt = $pdo->prepare("SELECT * FROM articles WHERE user_id = ?");
@@ -83,10 +86,10 @@ $articles = $stmt->fetchAll();
                     <h2><?= htmlspecialchars($article['name']) ?></h2>
                     <p><?= htmlspecialchars($article['description']) ?></p>
                     <p><strong>Price: $<?= number_format($article['price'], 2) ?></strong></p> <!-- Affichage du prix -->
-                    <small>Published on: <?= htmlspecialchars($article['published_at']) ?></small>
+                    <p>Published on: <?= htmlspecialchars($article['published_at']) ?></p>
                     <!-- Bouton Edit Product pour les admins -->
                     <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'user'): ?>
-                        <a href="product_edit.php?id=<?= $article['id'] ?>" class="edit-button">Edit Product</a>
+                        <button type="button" class="edit-button" onclick="location.href='product_edit.php?id=<?= $article['id'] ?>'">Edit Product</button>
                     <?php endif; ?>
                 </a>
             </li>
@@ -94,4 +97,9 @@ $articles = $stmt->fetchAll();
         
     </ul>
 <?php endif; ?>
+    </div>
+</div>
+
+
+
 
