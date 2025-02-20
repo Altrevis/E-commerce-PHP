@@ -22,7 +22,6 @@
                 <a href="#">Product</a>
                 <div class="dropdown-content">
                     <a href="../pages/product_create.php">Create Product</a>
-                    <a href="../pages/product_edit.php">Edit Products</a>
                 </div>
             </div>
             <a href="../pages/account.php">Account</a>

@@ -84,8 +84,14 @@ $articles = $stmt->fetchAll();
                     <p><?= htmlspecialchars($article['description']) ?></p>
                     <p><strong>Price: $<?= number_format($article['price'], 2) ?></strong></p> <!-- Affichage du prix -->
                     <small>Published on: <?= htmlspecialchars($article['published_at']) ?></small>
+                    <!-- Bouton Edit Product pour les admins -->
+                    <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'user'): ?>
+                        <a href="product_edit.php?id=<?= $article['id'] ?>" class="edit-button">Edit Product</a>
+                    <?php endif; ?>
                 </a>
             </li>
         <?php endforeach; ?>
+        
     </ul>
 <?php endif; ?>
+
