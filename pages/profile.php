@@ -17,7 +17,7 @@ $articles = $stmt->fetchAll();
 
 <h1>Profile of <?= htmlspecialchars($user['username']) ?></h1>
 
-<p>Email: <?= htmlspecialchars($user['email']) ?></p>
+<h3>Email: <?= htmlspecialchars($user['email']) ?></h3>
 
 <h2>Articles created by <?= htmlspecialchars($user['username']) ?></h2>
 

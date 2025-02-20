@@ -60,36 +60,37 @@ $articles = $pdo->query("SELECT * FROM articles")->fetchAll();
 ?>
 
 
-<h1>Admin Panel</h1>
-
-<h2>Users</h2>
-<ul>
-    <?php foreach ($users as $user): ?>
-        <?php if ($user['role'] !== 'admin'): ?>
-            <li>
-                <?= htmlspecialchars($user['username']) ?> - <?= htmlspecialchars($user['email']) ?>
-                <form method="POST" action="" style="display:inline;">
-                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                    <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                    <input type="hidden" name="delete_user" value="1">
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-        <?php endif; ?>
-    <?php endforeach; ?>
-</ul>
-
-<h2>Articles</h2>
-<ul>
-    <?php foreach ($articles as $article): ?>
-        <li>
-            <?= htmlspecialchars($article['name']) ?>
-            <form method="POST" action="" style="display:inline;">
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
-                <input type="hidden" name="delete_article" value="1">
-                <button type="submit">Delete</button>
-            </form>
-        </li>
-    <?php endforeach; ?>
-</ul>
+<div class="admin-panel">
+    <h1>Admin Panel</h1>
+    <h2>Users</h2>
+    <div class="user-list">
+        <?php foreach ($users as $user): ?>
+            <?php if ($user['role'] !== 'admin'): ?>
+                <div class="user-item">
+                    <h2><?= htmlspecialchars($user['username']) ?> - <?= htmlspecialchars($user['email']) ?></h2>
+                    <div class="article-list">
+                        <?php foreach ($articles as $article): ?>
+                            <?php if ($article['user_id'] == $user['id']): ?>
+                                <div class="article-item">
+                                    <h3><?= htmlspecialchars($article['name']) ?></h3>
+                                    <form method="POST" action="" style="display:inline;">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
+                                        <input type="hidden" name="delete_article" value="1">
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                    <form method="POST" action="" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                        <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                        <input type="hidden" name="delete_user" value="1">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+</div>

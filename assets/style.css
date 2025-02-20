@@ -74,10 +74,12 @@ h1, h2 {
     color: #222;
     font-weight: 700;
     margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
 p {
     color: #555;
+    margin-bottom: 0.5rem;
 }
 
 /* Forms */
@@ -198,4 +200,48 @@ a:hover {
     header nav a {
         margin: 8px 0;
     }
+}
+
+.admin-panel {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+}
+
+.user-item {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.user-item h2 {
+    margin-top: 0;
+}
+
+.article-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+}
+
+.article-item {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.article-item h3 {
+    margin-top: 0;
 }

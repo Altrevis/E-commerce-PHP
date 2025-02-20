@@ -38,12 +38,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
 }
 
 // Suppression du produit
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
-    $stmt = $pdo->prepare("DELETE FROM articles WHERE id = ?");
-    $stmt->execute([$id]);
-
-    header("Location: index.php"); // Redirection après suppression
-    exit;
+if (isset($_POST['delete_article']) && $_POST['delete_article'] === '1') {
+    $article_id = $_POST['article_id'];
+    try {
+        // Delete records from stock table
+        $stmt = $pdo->prepare("DELETE FROM stock WHERE article_id = ?");
+        $stmt->execute([$article_id]);
+        
+        // Delete the article from the database
+        $stmt = $pdo->prepare("DELETE FROM articles WHERE id = ?");
+        $stmt->execute([$article_id]);
+        
+        // Refresh the articles list
+        $articles = $pdo->query("SELECT * FROM articles")->fetchAll();
+        echo "Article deleted successfully!";
+    } catch (PDOException $e) {
+        echo "Error deleting article: " . $e->getMessage();
+    }
 }
 ?>
 
@@ -59,6 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
 </form>
 
 <!-- Bouton Delete -->
-<form method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
-    <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+<form method="POST" action="" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
+                                        <input type="hidden" name="delete_article" value="1">
+                                        <button type="submit">Delete</button>
 </form>
