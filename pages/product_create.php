@@ -54,13 +54,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<h1>Create Product</h1>
+<div class="narrow-block">
 
-<form method="POST">
-    <input type="text" name="name" placeholder="Name" required>
-    <textarea name="description" placeholder="Description"></textarea>
-    <input type="text" name="image_url" placeholder="Image URL">
-    <input type="number" name="quantity" placeholder="Quantity" required min="1">
-    <input type="number" name="price" placeholder="Price" step="0.01" required min="0"> <!-- Champ prix avec valeur minimale -->
-    <button type="submit">Create</button>
-</form>
+    <h1>Create Product</h1>
+    
+    <form method="POST">
+        <input type="text" name="name" placeholder="Name" required>
+        <textarea name="description" placeholder="Description"></textarea>
+        <input type="text" name="image_url" placeholder="Image URL">
+        <input type="number" name="quantity" placeholder="Quantity" required>
+        <input type="number" name="price" placeholder="Price" step="0.01" required>
+        <button type="submit">Create</button>
+    </form>
+</div>
