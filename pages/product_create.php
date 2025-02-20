@@ -11,11 +11,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = $_POST['price']; // Récupérer le prix
 
     $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
-
+    if (!isset($_SESSION['username'])) {
+        echo "Username is not set in session";
+        exit;
+    }
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
+    $stmt->execute([$_SESSION['username']]);
+    $user_id = $stmt->fetchColumn();
     try {
         // Insérer l'article avec le prix
-        $stmt = $pdo->prepare("INSERT INTO articles (name, slug, description, image_url, price, published_at) VALUES (?, ?, ?, ?, ?, NOW())");
-        $stmt->execute([$name, $slug, $description, $image_url, $price]);
+        $stmt = $pdo->prepare("INSERT INTO articles (name, slug, description, image_url, price, user_id, published_at) VALUES (?, ?, ?, ?, ?, ?, NOW())");
+        $stmt->execute([$name, $slug, $description, $image_url, $price, $user_id]);
 
         $article_id = $pdo->lastInsertId();
 

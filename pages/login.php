@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user && password_verify($password, $user['password'])) {
         // Si la connexion est réussie, on stocke l'utilisateur dans la session
         $_SESSION['user'] = $user;
+        $_SESSION['username'] = $user['username'];
 
         // Si l'utilisateur est un admin, rediriger vers la page d'admin
         if ($user['role'] === 'admin') {

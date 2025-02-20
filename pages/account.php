@@ -63,3 +63,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="number" name="amount" placeholder="Amount to add" min="1" required>
     <button type="submit" name="add_money">Add Money</button>
 </form>
+
+<h1>My Products</h1>
+
+<?php
+$stmt = $pdo->prepare("SELECT * FROM articles WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$articles = $stmt->fetchAll();
+?>
+
+<?php if (empty($articles)): ?>
+    <p>No products available.</p>
+<?php else: ?>
+    <ul class="product-list">
+        <?php foreach ($articles as $article): ?>
+            <li class="product-item">
+                <a href="product_detail.php?id=<?= htmlspecialchars($article['id']) ?>">
+                    <img src="<?= htmlspecialchars($article['image_url']) ?>" alt="<?= htmlspecialchars($article['name']) ?>" width="150">
+                    <h2><?= htmlspecialchars($article['name']) ?></h2>
+                    <p><?= htmlspecialchars($article['description']) ?></p>
+                    <p><strong>Price: $<?= number_format($article['price'], 2) ?></strong></p> <!-- Affichage du prix -->
+                    <small>Published on: <?= htmlspecialchars($article['published_at']) ?></small>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>

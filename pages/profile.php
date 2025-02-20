@@ -3,12 +3,29 @@ session_start();
 require_once '../includes/db.php';
 require_once '../includes/header.php';
 
-// Fetch all articles from the database, sorted by publication date (newest first)
-$stmt = $pdo->query("SELECT a.*, u.username, u.id as user_id FROM articles a JOIN users u ON a.user_id = u.id ORDER BY a.published_at DESC");
+// Fetch user information from the database
+$user_id = $_GET['id'];
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([$user_id]);
+$user = $stmt->fetch();
+
+// Fetch articles created by the user
+$stmt = $pdo->prepare("SELECT * FROM articles WHERE user_id = ?");
+$stmt->execute([$user_id]);
 $articles = $stmt->fetchAll();
 ?>
 
-<h1>Product List</h1>
+<h1>Profile of <?= htmlspecialchars($user['username']) ?></h1>
+
+<p>Email: <?= htmlspecialchars($user['email']) ?></p>
+
+<h2>Articles created by <?= htmlspecialchars($user['username']) ?></h2>
+
+<?php
+$stmt = $pdo->prepare("SELECT * FROM articles WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$articles = $stmt->fetchAll();
+?>
 
 <?php if (empty($articles)): ?>
     <p>No products available.</p>
@@ -22,10 +39,8 @@ $articles = $stmt->fetchAll();
                     <p><?= htmlspecialchars($article['description']) ?></p>
                     <p><strong>Price: $<?= number_format($article['price'], 2) ?></strong></p> <!-- Affichage du prix -->
                     <small>Published on: <?= htmlspecialchars($article['published_at']) ?></small>
-                    <small>Created by: <a href="profile.php?id=<?= htmlspecialchars($article['user_id']) ?>"><?= htmlspecialchars($article['username']) ?></a></small>
                 </a>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
-
