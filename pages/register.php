@@ -4,47 +4,27 @@ require_once '../includes/db.php';
 require_once '../includes/header.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Récupération des données du formulaire
-    $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-    // Validation des champs
-    if (empty($username) || empty($email) || empty($password)) {
-        echo "All fields are required.";
-        exit;
-    }
+    // Insérer l'utilisateur avec balance initiale à 0
+    $stmt = $pdo->prepare("INSERT INTO users (username, email, password, balance) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$username, $email, $password, 0]);
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "Invalid email format.";
-        exit;
-    }
+    // Récupérer l'ID de l'utilisateur inséré
+    $user_id = $pdo->lastInsertId();
 
-    // Hacher le mot de passe
-    $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+    // Stocker toutes les infos nécessaires dans la session
+    $_SESSION['user'] = [
+        'id' => $user_id,
+        'username' => $username,
+        'email' => $email,
+        'balance' => 0 // initialisation de la balance à 0
+    ];
 
-    try {
-        // Insérer l'utilisateur dans la base de données avec une balance initiale à 0
-        $stmt = $pdo->prepare("INSERT INTO users (username, email, password, balance) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$username, $email, $passwordHash, 0]);
-
-        // Récupérer l'ID de l'utilisateur inséré
-        $user_id = $pdo->lastInsertId();
-
-        // Stocker les informations de l'utilisateur dans la session
-        $_SESSION['user'] = [
-            'id' => $user_id,
-            'username' => $username,
-            'email' => $email,
-            'balance' => 0 // initialisation de la balance à 0
-        ];
-
-        header('Location: ./index.php');
-        exit;
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-        exit;
-    }
+    header('Location: ./index.php');
+    exit;
 }
 ?>
 

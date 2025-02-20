@@ -3,34 +3,29 @@ session_start();
 require_once '../includes/db.php';
 require_once '../includes/header.php';
 
-// Vérifier si un ID utilisateur est fourni
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    echo "Invalid user ID";
-    exit;
-}
-
-$user_id = intval($_GET['id']);
-
-// Récupération des informations de l'utilisateur
+// Fetch user information from the database
+$user_id = $_GET['id'];
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
-if (!$user) {
-    echo "User not found";
-    exit;
-}
-
-// Récupération des articles créés par l'utilisateur
+// Fetch articles created by the user
 $stmt = $pdo->prepare("SELECT * FROM articles WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $articles = $stmt->fetchAll();
 ?>
 
 <h1>Profile of <?= htmlspecialchars($user['username']) ?></h1>
+
 <h3>Email: <?= htmlspecialchars($user['email']) ?></h3>
 
 <h2>Articles created by <?= htmlspecialchars($user['username']) ?></h2>
+
+<?php
+$stmt = $pdo->prepare("SELECT * FROM articles WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$articles = $stmt->fetchAll();
+?>
 
 <?php if (empty($articles)): ?>
     <p>No products available.</p>

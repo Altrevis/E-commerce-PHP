@@ -173,7 +173,22 @@ a:hover {
     color: #0056b3;
 }
 
-/* Admin Panel */
+/* Responsive */
+@media (max-width: 768px) {
+    .product-item {
+        width: 100%;
+    }
+
+    header nav {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    header nav a {
+        margin: 8px 0;
+    }
+}
+
 .admin-panel {
     max-width: 1200px;
     margin: 40px auto;
@@ -184,7 +199,6 @@ a:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* User List */
 .user-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -202,7 +216,6 @@ a:hover {
     margin-top: 0;
 }
 
-/* Article List */
 .article-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -219,8 +232,6 @@ a:hover {
 .article-item h3 {
     margin-top: 0;
 }
-
-/* Buttons */
 .edit-button {
     background-color: #7cbcff;
     color: #222;
@@ -233,9 +244,8 @@ a:hover {
 }
 
 .edit-button:hover {
-    background-color: #5fa6d4;
+    background-color: #7cbcff;
 }
-
 .username-button {
     background-color: #7cbcff;
     color: #222;
@@ -253,14 +263,12 @@ a:hover {
 }
 
 .username-button:hover {
-    background-color: #5fa6d4;
+    background-color: #7cbcff;
 }
-
-/* Account Section */
 .account-container {
     display: grid;
+
     gap: 50px;
-    margin-bottom: -20px;
 }
 
 .account-info {
@@ -270,31 +278,4 @@ a:hover {
 .edit-profile {
     grid-column: 2;
     margin-top: 0;
-}
-
-.add-money {
-    grid-column: 2;
-    margin-top: -10%;
-}
-
-/* Narrow Block */
-.narrow-block {
-    max-width: 45%;
-    margin: 0 auto;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .product-item {
-        width: 100%;
-    }
-
-    header nav {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    header nav a {
-        margin: 8px 0;
-    }
 }

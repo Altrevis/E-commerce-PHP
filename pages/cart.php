@@ -56,12 +56,7 @@ if (isset($_POST['cart_id'])) {
 }
 
 $user_id = $_SESSION['user']['id'];
-$stmt = $pdo->prepare("
-    SELECT c.id, a.name, a.image_url, c.quantity, a.price 
-    FROM cart c 
-    JOIN articles a ON c.article_id = a.id 
-    WHERE c.user_id = ?
-");
+$stmt = $pdo->prepare("SELECT c.id, a.name, a.image_url, c.quantity, a.price FROM cart c JOIN articles a ON c.article_id = a.id WHERE c.user_id = ?");
 $stmt->execute([$user_id]);
 $cart_items = $stmt->fetchAll();
 ?>
@@ -74,21 +69,15 @@ $cart_items = $stmt->fetchAll();
     <ul>
         <?php foreach ($cart_items as $item): ?>
             <li>
-                <img src="<?= htmlspecialchars($item['image_url']) ?>" 
-                     alt="<?= htmlspecialchars($item['name']) ?>" 
-                     width="50">
-                <?= htmlspecialchars($item['name']) ?> - 
-                Quantity: <?= $item['quantity'] ?> - 
-                Price: $<?= number_format($item['price'], 2) ?>
-
+                <img src="<?= htmlspecialchars($item['image_url']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" width="50">
+                <?= htmlspecialchars($item['name']) ?> - Quantity: <?= $item['quantity'] ?> - Price: $<?= number_format($item['price'], 2) ?>
                 <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                     <input type="hidden" name="cart_id" value="<?= $item['id'] ?>">
                     <button type="submit">Remove</button>                  
                 </form>
-
                 <?php if (!empty($error)): ?>
-                    <p style="color: red;"><?= htmlspecialchars($error) ?></p>
-                <?php endif; ?>
+                        <p style="color: red;"><?= htmlspecialchars($error) ?></p>
+                    <?php endif; ?>
             </li>
         <?php endforeach; ?>
     </ul>
