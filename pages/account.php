@@ -33,7 +33,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "Invalid amount.";
         }
     }
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['email']) && isset($_POST['password'])) {
+            $email = $_POST['email'];
+            $password = $_POST['password'] ? password_hash($_POST['password'], PASSWORD_BCRYPT) : $user['password'];
     
+            $stmt = $pdo->prepare("UPDATE users SET email = ?, password = ? WHERE id = ?");
+            $stmt->execute([$email, $password, $user_id]);
+    
+            $_SESSION['user']['email'] = $email;
+            echo "Profile updated successfully!";
+        }
+    }
     // Ajouter de l'argent
     if (isset($_POST['add_money'])) {
         $amount = $_POST['amount'];
