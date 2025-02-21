@@ -14,7 +14,9 @@ $articles = $stmt->fetchAll();
 <!-- Si aucun produit n'est disponible -->
 <p>No products available.</p>
 <?php else: ?>
-<ul class="product-list">
+<input type="search" id="search-input" placeholder="Search articles...">
+
+<ul class="product-list" id="product-list">
     <?php foreach ($articles as $article): ?>
     <li class="product-item">
         <!-- Lien vers la page de détails du produit -->
@@ -45,3 +47,24 @@ $articles = $stmt->fetchAll();
     <?php endforeach; ?>
 </ul>
 <?php endif; ?>
+
+<script>
+    const searchInput = document.getElementById('search-input');
+    const productList = document.getElementById('product-list');
+
+    searchInput.addEventListener('input', () => {
+        const searchQuery = searchInput.value.trim().toLowerCase();
+        const productItems = productList.children;
+
+        for (let i = 0; i < productItems.length; i++) {
+            const productItem = productItems[i];
+            const articleName = productItem.querySelector('h2').textContent.trim().toLowerCase();
+
+            if (articleName.includes(searchQuery)) {
+                productItem.style.display = 'block';
+            } else {
+                productItem.style.display = 'none';
+            }
+        }
+    });
+</script>
