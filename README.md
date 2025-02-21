@@ -73,10 +73,11 @@
     $password = 'xxxx';
    ```
 3. installer la db :
+
     - Créer la db avec le nom ci-dessous
-      
-      ![image](img/db 1.png)
 
-    -Ajouter la db dans l'emplacement importer
+    ![image](img/db 1.png)
 
-      ![image](img/db 2.png)
+    - Ajouter la db dans l'emplacement importer
+
+    ![image](img/db 2.png)
