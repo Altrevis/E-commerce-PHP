@@ -39,19 +39,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Vérification si l'utilisateur met à jour son profil (username et mot de passe)
-    if (isset($_POST['username']) && isset($_POST['password'])) {
-        $username = $_POST['username'];
-        // Hachage du mot de passe uniquement si un nouveau mot de passe est fourni
-        $password = $_POST['password'] ? password_hash($_POST['password'], PASSWORD_BCRYPT) : $user['password'];
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    $username = $_POST['username'];
+    // Hachage du mot de passe uniquement si un nouveau mot de passe est fourni
+    $password = $_POST['password'] ? password_hash($_POST['password'], PASSWORD_BCRYPT) : $user['password'];
 
-        // Mise à jour des informations de l'utilisateur dans la base de données
-        $stmt = $pdo->prepare("UPDATE users SET username = ?, password = ? WHERE id = ?");
-        $stmt->execute([$username, $password, $user_id]);
+    // Mise à jour des informations de l'utilisateur dans la base de données
+    $stmt = $pdo->prepare("UPDATE users SET username = ?, password = ? WHERE id = ?");
+    $stmt->execute([$username, $password, $user_id]);
 
-        // Mise à jour du username dans la session
-        $_SESSION['user']['username'] = $username;
-        echo "Profile updated successfully!";
-    }
+    // Mise à jour du username dans la session
+    $_SESSION['user']['username'] = $username;
+
+    // Redirection vers la même page pour afficher les informations mises à jour
+    header("Location: account.php");
+    exit;
+}
 }
 ?>
 
@@ -118,4 +121,5 @@ $articles = $stmt->fetchAll();
     </li>
     <?php endforeach; ?>
 </ul>
+
 <?php endif; ?>
