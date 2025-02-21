@@ -76,8 +76,8 @@
 
     - Créer la db avec le nom ci-dessous
 
-    ![image](img/db 1.png)
+    ![image](img/db_1.png)
 
     - Ajouter la db dans l'emplacement importer
 
-    ![image](img/db 2.png)
+    ![image](img/db_2.png)
