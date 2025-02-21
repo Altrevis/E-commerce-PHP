@@ -9,7 +9,7 @@
 
   ![image](img/1.png)
   
-- Un système de login / password est aussi mise en place avec un affichage différent en fonction de si on est user / user-non enregistré / admin.
+- Un système de login / password est aussi mise en place avec un affichage différent en fonction de si on est user / user non enregistré / admin.
 
   ![image](img/2.png)
 
