@@ -38,18 +38,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Vérification si l'utilisateur met à jour son profil (email et mot de passe)
-    if (isset($_POST['email']) && isset($_POST['password'])) {
-        $email = $_POST['email'];
+    // Vérification si l'utilisateur met à jour son profil (username et mot de passe)
+    if (isset($_POST['username']) && isset($_POST['password'])) {
+        $username = $_POST['username'];
         // Hachage du mot de passe uniquement si un nouveau mot de passe est fourni
         $password = $_POST['password'] ? password_hash($_POST['password'], PASSWORD_BCRYPT) : $user['password'];
 
         // Mise à jour des informations de l'utilisateur dans la base de données
-        $stmt = $pdo->prepare("UPDATE users SET email = ?, password = ? WHERE id = ?");
-        $stmt->execute([$email, $password, $user_id]);
+        $stmt = $pdo->prepare("UPDATE users SET username = ?, password = ? WHERE id = ?");
+        $stmt->execute([$username, $password, $user_id]);
 
-        // Mise à jour de l'email dans la session
-        $_SESSION['user']['email'] = $email;
+        // Mise à jour du username dans la session
+        $_SESSION['user']['username'] = $username;
         echo "Profile updated successfully!";
     }
 }
@@ -68,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="edit-profile">
         <h2>Edit Profile</h2>
         <form method="POST">
-            <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($user['email']) ?>"
-                required>
+            <input type="text" name="username" placeholder="New Username"
+                value="<?= htmlspecialchars($user['username']) ?>" required>
             <input type="password" name="password" placeholder="New Password">
             <button type="submit">Update</button>
         </form>

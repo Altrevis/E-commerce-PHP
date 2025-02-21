@@ -174,7 +174,7 @@ a:hover {
 }
 
 #search-input {
-    width: 50%;
+    width: 30%;
     padding: 15px;
     font-size: 18px;
     border: none;
@@ -189,22 +189,6 @@ a:hover {
 .product-item[style*="display: none"] {
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .product-item {
-        width: 100%;
-    }
-
-    header nav {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    header nav a {
-        margin: 8px 0;
-    }
 }
 
 /* Admin Panel */
@@ -319,4 +303,20 @@ a:hover {
 .narrow-block {
     max-width: 45%;
     margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .product-item {
+        width: 100%;
+    }
+
+    header nav {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    header nav a {
+        margin: 8px 0;
+    }
 }
